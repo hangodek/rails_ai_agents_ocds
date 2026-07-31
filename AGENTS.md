@@ -53,6 +53,7 @@ bin/rails console                              # Interactive console
 ## Development Workflow
 
 Follow **TDD: Red -> Green -> Refactor**:
+
 1. **RED:** Write a failing test describing desired behavior
 2. **GREEN:** Write minimal code to pass the test
 3. **REFACTOR:** Improve code structure while keeping tests green
@@ -64,6 +65,7 @@ Follow **TDD: Red -> Green -> Refactor**:
 - **Services:** `.call` class method, return Result objects, namespace by domain (`Entities::CreateService`).
 - **No premature abstraction:** Don't extract until complexity demands it. Three similar lines > wrong abstraction.
 - **Explicit > implicit:** Clear service calls over hidden callbacks. Named methods over metaprogramming.
+- **Design compliance:** Every styling and theme (Tailwind classes, colors, components, layouts) MUST follow `DESIGN.md` at the repo root. No custom colors, fonts, spacing, or component styles outside what `DESIGN.md` defines.
 
 See @docs/rails-development-principles.md for the complete development principles guide.
 
@@ -79,7 +81,7 @@ See @docs/rails-development-principles.md for the complete development principle
 ## Naming Conventions
 
 | Layer | Pattern | Example |
-|-------|---------|---------|
+| ------- | --------- | --------- |
 | Model | Singular PascalCase | `Entity`, `OrderItem` |
 | Controller | Plural PascalCase | `EntitiesController` |
 | Service | Namespaced + `Service` | `Entities::CreateService` |
