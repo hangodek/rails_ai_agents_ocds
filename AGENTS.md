@@ -67,6 +67,15 @@ Follow **TDD: Red -> Green -> Refactor**:
 
 See @docs/rails-development-principles.md for the complete development principles guide.
 
+## AI Tooling
+
+- **Canonical config lives in `.claude/`** (Claude Code). opencode mirrors it under `.opencode/` and `.agents/skills/`; the model is set in `opencode.json` (default `opencode/deepseek-v4-flash-free`).
+- **Specialist agents** (`.opencode/agents/*.md`): delegate layer work via the `task` tool — e.g. `model-agent`, `service-agent`, `rspec-agent`, `viewcomponent-agent`, `lint-agent`. Subagents inherit the session model.
+- **Slash commands** (`.opencode/commands/**`): `/feature-plan`, `/sdd:*`, `/sentry:*`, etc.
+- **Rules** (`.opencode/rules/*.md`) are loaded into every session via `instructions` in `opencode.json`.
+- **Hooks** run via `.opencode/plugins/project-hooks.ts`: destructive-command guard, RuboCop/ERB auto-format after edits, session status logging, desktop notifications.
+- **Keep in sync:** after changing anything under `.claude/`, run `scripts/sync_claude_to_opencode.sh` and restart opencode.
+
 ## Naming Conventions
 
 | Layer | Pattern | Example |

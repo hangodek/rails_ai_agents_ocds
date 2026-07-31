@@ -1,0 +1,37 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "opencode/deepseek-v4-flash-free",
+  "small_model": "opencode/deepseek-v4-flash-free",
+  "instructions": [
+    "AGENTS.md",
+    ".opencode/rules/anti-patterns.md",
+    ".opencode/rules/caveman.md",
+    ".opencode/rules/cli.md",
+    ".opencode/rules/cli-tools.md",
+    ".opencode/rules/controllers.md",
+    ".opencode/rules/jobs.md",
+    ".opencode/rules/mailers.md",
+    ".opencode/rules/migrations.md",
+    ".opencode/rules/models.md",
+    ".opencode/rules/policies.md",
+    ".opencode/rules/principles.md",
+    ".opencode/rules/queries.md",
+    ".opencode/rules/services.md",
+    ".opencode/rules/testing.md",
+    ".opencode/rules/views.md"
+  ],
+  "mcp": {
+    "sentry-monitor": {
+      "type": "local",
+      "command": [
+        "mcp/sentry_monitor/.venv/bin/python",
+        "-m",
+        "mcp_server.server"
+      ],
+      "environment": {
+        "PYTHONPATH": "mcp/sentry_monitor"
+      },
+      "enabled": true
+    }
+  }
+}
