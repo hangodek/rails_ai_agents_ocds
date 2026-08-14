@@ -1,5 +1,6 @@
 ---
-description: Check for new Sentry production errors and propose fixes
+description: >-
+  Check for new Sentry production errors and propose fixes
 ---
 
 # Monitor: Single Monitoring Cycle

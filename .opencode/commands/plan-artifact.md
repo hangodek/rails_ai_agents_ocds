@@ -1,5 +1,6 @@
 ---
-description: Creates one polished, self-contained HTML artifact from a plan, PRD, roadmap, strategy, migration, rollout, research, operations, or implementation proposal. Use when the user asks for a visual plan explanation, walkthrough, artifact, or presentation.
+description: >-
+  Creates one polished, self-contained HTML artifact from a plan, PRD, roadmap, strategy, migration, rollout, research, operations, or implementation proposal. Use when the user asks for a visual plan explanation, walkthrough, artifact, or presentation.
 ---
 
 # Presenting Plans

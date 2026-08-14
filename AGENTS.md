@@ -71,12 +71,30 @@ See @docs/rails-development-principles.md for the complete development principle
 
 ## AI Tooling
 
-- **Canonical config lives in `.claude/`** (Claude Code). opencode mirrors it under `.opencode/` and `.agents/skills/`; the model is set in `opencode.json` (default `opencode/deepseek-v4-flash-free`).
-- **Specialist agents** (`.opencode/agents/*.md`): delegate layer work via the `task` tool — e.g. `model-agent`, `service-agent`, `rspec-agent`, `viewcomponent-agent`, `lint-agent`. Subagents inherit the session model.
-- **Slash commands** (`.opencode/commands/**`): `/feature-plan`, `/sdd:*`, `/sentry:*`, etc.
-- **Rules** (`.opencode/rules/*.md`) are loaded into every session via `instructions` in `opencode.json`.
-- **Hooks** run via `.opencode/plugins/project-hooks.ts`: destructive-command guard, RuboCop/ERB auto-format after edits, session status logging, desktop notifications.
-- **Keep in sync:** after changing anything under `.claude/`, run `scripts/sync_claude_to_opencode.sh` and restart opencode.
+- **Canonical config lives in `.ai/`** — provider-agnostic. All tool-specific directories are generated from it.
+- **Model tiers**: agents declare `model_tier: standard | fast | powerful`. Each provider maps these to real model IDs in `.ai/settings/model-tiers.yml`.
+- **Specialist agents** (`**/agents/*.md`): delegate layer work — e.g. `model-agent`, `service-agent`, `rspec-agent`, `viewcomponent-agent`, `lint-agent`.
+- **Slash commands** (`**/commands/**`): `/feature-plan`, `/sdd:*`, `/sentry:*`, etc.
+- **Rules** (`**/rules/*.md`): loaded per provider's native convention (path-scoped for Claude, `instructions` list for opencode, `.mdc` for Cursor, bridge files for Copilot, etc.).
+- **Universal context bundle**: `AI_CONTEXT.md` at repo root contains all conventions in a single file for any web chat AI (Kimi, ChatGPT, Ling, Muse AI, Claude web, Gemini web) or custom system prompt.
+- **Keep in sync:** after changing anything under `.ai/`, run `ruby scripts/sync_ai_to_all.rb`.
+
+### Supported AI Tools & Platforms
+
+| Platform / Tool | Type | Integration Point | Auto-Load Mechanism |
+|---|---|---|---|
+| **Claude Code** | CLI / Agent | `.claude/`, `CLAUDE.md` | Auto-detects `CLAUDE.md` / `.claude/` |
+| **opencode** (any model) | CLI / Agent | `.opencode/`, `opencode.json` | Auto-loads `opencode.json` instructions |
+| **Antigravity** (Gemini) | IDE / Agent | `.agents/`, `AGENTS.md` | Auto-detects `AGENTS.md` |
+| **Gemini CLI** | CLI / Agent | `.gemini/`, `GEMINI.md` | Auto-detects `GEMINI.md` |
+| **Cursor** | IDE | `.cursor/rules/*.mdc`, `AGENTS.md` | Auto-loads `.cursor/rules/` & `AGENTS.md` |
+| **Windsurf** | IDE | `.windsurfrules`, `AGENTS.md` | Auto-loads `.windsurfrules` & `AGENTS.md` |
+| **Cline** | IDE Ext | `.clinerules/`, `AGENTS.md` | Auto-loads `.clinerules/` & `AGENTS.md` |
+| **Continue.dev** | IDE Ext | `.continue/rules/` | Auto-loads `.continue/rules/` |
+| **Aider** | CLI | `CONVENTIONS.md`, `.aider.conf.yml` | Auto-reads `CONVENTIONS.md` via config |
+| **GitHub Copilot** | IDE Ext | `.github/instructions/`, `AGENTS.md` | Auto-reads instructions & `AGENTS.md` |
+| **MiMo Code / Kimi Code / Muse Code** | CLI / Agent | `AGENTS.md`, `CLAUDE.md` | Native `AGENTS.md` discovery |
+| **Chat AIs** (Kimi, Ling, ChatGPT, etc.) | Web Chat / API | `AI_CONTEXT.md` | Paste `AI_CONTEXT.md` or set as system prompt |
 
 ## Naming Conventions
 

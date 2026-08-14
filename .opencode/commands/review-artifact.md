@@ -1,5 +1,6 @@
 ---
-description: Creates one polished, self-contained HTML artifact from review findings, audit notes, PR feedback, code review output, security review notes, design review notes, QA reports, or implementation assessments.
+description: >-
+  Creates one polished, self-contained HTML artifact from review findings, audit notes, PR feedback, code review output, security review notes, design review notes, QA reports, or implementation assessments.
 ---
 
 # Presenting Reviews

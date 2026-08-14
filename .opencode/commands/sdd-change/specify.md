@@ -1,5 +1,6 @@
 ---
-description: Create a lightweight change specification for bug fixes and small features — skips the full SDD ceremony.
+description: >-
+  Create a lightweight change specification for bug fixes and small features — skips the full SDD ceremony.
 ---
 
 ## User Input

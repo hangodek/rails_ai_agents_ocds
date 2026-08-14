@@ -1,5 +1,6 @@
 ---
-description: Summarize what happened on the current branch since the developer's last contribution (commits, authors, stats, key changes).
+description: >-
+  Summarize what happened on the current branch since the developer's last contribution (commits, authors, stats, key changes).
 ---
 
 # Catchup: Branch Activity Since Last Contribution

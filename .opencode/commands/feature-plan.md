@@ -1,12 +1,6 @@
 ---
 description: >-
-  Analyzes feature specifications and creates detailed TDD implementation
-  plans with incremental PR breakdown and specialist agent assignments.
-  Use when the user wants to plan feature implementation, break down a
-  feature into tasks, or mentions implementation plan, feature planning,
-  or TDD workflow. WHEN NOT: Writing the specification itself (use
-  feature-spec), reviewing existing specs (use feature-spec-review), or
-  implementing code directly.
+  Analyzes feature specifications and creates detailed TDD implementation plans with incremental PR breakdown and specialist agent assignments. Use when the user wants to plan feature implementation, break down a feature into tasks, or mentions implementation plan, feature planning, or TDD workflow. WHEN NOT: Writing the specification itself (use feature-spec), reviewing existing specs (use feature-spec-review), or implementing code directly.
 ---
 
 # Feature Implementation Planner

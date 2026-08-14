@@ -1,98 +1,52 @@
 # Rails AI Agents
 
-A production-ready AI coding agent setup for Ruby on Rails development: **19 specialized agents**, **26 slash commands** (including the [SDD kit](#spec-driven-development-sdd-kit)), **18 skills**, **14 rules** (11 path-scoped + 3 always-on), **1 MCP**, and **6 lifecycle hooks**. Ships as a canonical **Claude Code** setup (`.claude/`) with an **opencode** mirror (`.opencode/` + `AGENTS.md` + `opencode.json`) for deepseek or any other opencode provider. Drop it into your project and your AI assistant instantly knows Rails conventions, TDD workflows, and production patterns.
+A production-ready, universal AI coding agent setup for Ruby on Rails development: **19 specialized agents**, **26 slash commands** (including the [SDD kit](#spec-driven-development-sdd-kit)), **18 skills**, **16 rules**, **1 MCP**, and universal lifecycle hooks. Ships with **`.ai/` as the single canonical source of truth** and automatically syncs to **any AI assistant or coding platform** — Claude Code, opencode (DeepSeek, etc.), Antigravity/Gemini, Cursor, Windsurf, Cline, Continue.dev, Aider, GitHub Copilot, MiMo Code, Kimi Code, Muse Code, and any chat-based AI (ChatGPT, Kimi, Ling, etc.) via `AI_CONTEXT.md`. Drop it into your project and your AI assistant instantly knows Rails conventions, TDD workflows, and production patterns.
 
 Also includes:
 - [Spec Driven Development (SDD) kit](#spec-driven-development-sdd-kit) — a full specification-to-implementation pipeline + lightweight mode for bug fixes.
-- a separate 37signals-style conventions pack (`.claude_37signals/`) for teams that prefer rich models + Minitest over the default layered setup.
-- [opencode support](#opencode-support) — the whole setup auto-synced to opencode conventions, ready for `opencode/deepseek-v4`.
-- Claude Code Extensibility Guide
-- and more!
-
-
-## Latest Updates
-
-- Add caveman rule with full intensity level (token reduction)
-- Add plan, review, and PR artifact commands.
-- Add tmux session launcher script for Rails development.
+- a separate 37signals-style conventions pack (`.ai_37signals/`) for teams that prefer rich models + Minitest over the default layered setup.
+- [Multi-Provider & Universal AI Support](#multi-provider-and-universal-ai-support) — auto-synced across all AI tools.
+- Universal context bundle (`AI_CONTEXT.md`) for any web chat AI or custom system prompt.
 
 ## Quick Start
 
 ```bash
-# Most projects: copy the default .claude/ directory into your Rails project
-cp -r .claude/ /path/to/your-rails-app/.claude/
+# Copy the canonical .ai/ directory and root entry points into your Rails project
+cp -r .ai/ AGENTS.md /path/to/your-rails-app/
+
+# In your rails app, generate all provider targets (Claude, Cursor, opencode, Gemini, etc.):
+ruby scripts/sync_ai_to_all.rb
 ```
 
-| If you want... | Copy |
-|---|---|
-| Default setup (layered architecture, RSpec, Pundit, PostgreSQL) | `.claude/` |
-| 37signals-style conventions (rich models, concerns, Minitest) | `.claude_37signals/` **instead of** `.claude/` |
-| Spec Driven Development commands (`/sdd:*`, `/sdd-change:*`) | `.specify/` in addition to your chosen `.claude*` pack |
-| Statusline | `statusline/` |
-| Sentry integration | `mcp/sentry_monitor/` |
-
-`.specify/` is optional unless you want the SDD workflow. `.claude_37signals/` is currently a conventions pack (instructions, agents, skills, rules, settings), while the slash-command set documented below lives under `.claude/commands/`.
-
-## Quick Start
-
-```bash
-# Claude Code: copy the default .claude/ directory into your Rails project
-cp -r .claude/ /path/to/your-rails-app/.claude/
-
-# opencode (e.g. with deepseek v4): copy the opencode files
-cp -r .opencode/ opencode.json AGENTS.md /path/to/your-rails-app/
-```
-
-| If you want... | Copy |
-|---|---|
-| Claude Code setup (layered architecture, RSpec, Pundit, PostgreSQL) | `.claude/` |
-| opencode setup (deepseek v4, any opencode provider) | `.opencode/`, `opencode.json`, `AGENTS.md` |
-| 37signals-style conventions (rich models, concerns, Minitest) | `.claude_37signals/` **instead of** `.claude/` |
-| Spec Driven Development commands (`/sdd:*`, `/sdd-change:*`) | `.specify/` in addition to your chosen pack |
-| Statusline | `statusline/` |
-| Sentry integration | `mcp/sentry_monitor/` |
-
-`.specify/` is optional unless you want the SDD workflow. `.claude_37signals/` is currently a conventions pack (instructions, agents, skills, rules, settings), while the slash-command set documented below lives under `.claude/commands/`.
-
-## OpenAI Codex and GitHub Copilot Support
-
-This repo includes a practical setup for both OpenAI Codex and GitHub Copilot (including different Copilot-backed models such as GPT, Claude, and Gemini), while keeping `.claude/` as the canonical source.
-
-- `AGENTS.md` is the shared high-level project instruction file.
-- `.agents/skills/` is the mirrored skills directory used by Codex and opencode.
-- `.claude/skills/` remains the canonical source for shared skills.
-- `.github/copilot-instructions.md` is the Copilot entrypoint.
-- `.github/instructions/claude-rules/` contains generated path-scoped bridge files that point back to `.claude/rules/`.
-
-Because skill discovery is currently unreliable with symlinks, this repo includes local sync scripts that copy Claude skills into real directories:
-
-```bash
-scripts/sync_claude_skills_to_codex.sh
-scripts/sync_claude_rules_to_copilot.sh
-```
-
-Run these scripts after adding, removing, or renaming any skill or rule. If Codex or Copilot is already running, restart or reload the chat session to pick up updates.
-
-## opencode Support
-
-The `.claude/` config is mirrored to opencode conventions (`.opencode/`, `AGENTS.md`, `opencode.json`) so the whole setup runs in [opencode](https://opencode.ai) on **any provider model** — e.g. `opencode/deepseek-v4-flash-free`:
-
-| Claude Code | opencode | Notes |
+| If you use... | What it needs | Auto-Load Mechanism |
 |---|---|---|
-| `.claude/agents/*.md` | `.opencode/agents/*.md` | `mode: subagent`, `permission: { edit: allow }`; `model`/`tools`/`maxTurns` dropped — agents inherit the model from `opencode.json` |
-| `.claude/commands/**` | `.opencode/commands/**` | Same names: `/feature-plan`, `/sdd:specify`, `/sentry:monitor`, ... |
-| `.claude/rules/*.md` | `.opencode/rules/*.md` | Frontmatter-stripped, loaded every session via `instructions` in `opencode.json` |
-| `.claude/skills/` | `.agents/skills/` | Auto-loaded by opencode |
-| `.claude/settings.json` hooks | `.opencode/plugins/project-hooks.ts` | Session status log, destructive-command guard, RuboCop/ERB auto-format, desktop notification |
-| `.mcp.json` | `mcp` key in `opencode.json` | `sentry-monitor` MCP registered for opencode |
+| **Claude Code** | `.claude/`, `CLAUDE.md` | Auto-detects `CLAUDE.md` / `.claude/` |
+| **opencode** (DeepSeek, etc.) | `.opencode/`, `opencode.json`, `AGENTS.md` | Auto-loads `opencode.json` instructions |
+| **Antigravity** (Google Gemini) | `.agents/`, `AGENTS.md` | Native `AGENTS.md` discovery |
+| **Gemini CLI** | `.gemini/`, `GEMINI.md` | Auto-detects `GEMINI.md` |
+| **Cursor** | `.cursor/rules/*.mdc`, `AGENTS.md` | Auto-loads `.cursor/rules/` & `AGENTS.md` |
+| **Windsurf** | `.windsurfrules`, `AGENTS.md` | Auto-loads `.windsurfrules` & `AGENTS.md` |
+| **Cline** | `.clinerules/`, `AGENTS.md` | Auto-loads `.clinerules/` & `AGENTS.md` |
+| **Continue.dev** | `.continue/rules/` | Auto-loads `.continue/rules/` |
+| **Aider** | `CONVENTIONS.md`, `.aider.conf.yml` | Auto-reads `CONVENTIONS.md` |
+| **GitHub Copilot** | `.github/instructions/`, `AGENTS.md` | Auto-reads instructions & `AGENTS.md` |
+| **MiMo Code / Kimi Code / Muse Code** | `AGENTS.md`, `CLAUDE.md` | Native `AGENTS.md` discovery |
+| **Chat AIs** (Kimi, Ling, ChatGPT, Claude.ai, Gemini web) | `AI_CONTEXT.md` | Paste `AI_CONTEXT.md` or set as system prompt |
+| **37signals-style conventions** | `.ai_37signals/` **instead of** `.ai/` | Rich models, concerns, Minitest |
 
-**One command keeps the mirror in sync** (run after editing anything under `.claude/`):
+## Multi-Provider and Universal AI Support
+
+This repo uses **`.ai/` as the universal source of truth**. Abstract model tiers (`standard`, `fast`, `powerful`) are defined in `.ai/settings/model-tiers.yml` and resolved per provider.
+
+**One command keeps all AI configurations in sync:**
 
 ```bash
-scripts/sync_claude_to_opencode.sh
+ruby scripts/sync_ai_to_all.rb
+# or simply:
+scripts/sync_all.sh
 ```
 
-Restart opencode after syncing — config is loaded once at startup. Claude Code specific features that have no opencode equivalent (path-scoped rules, Agent Teams handoffs, worktree isolation, statusline) are documented in the mirror files where relevant.
+Restart your AI tool or reload the chat session after syncing to pick up updates.
 
 ## What's Inside
 

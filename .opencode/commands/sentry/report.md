@@ -1,5 +1,6 @@
 ---
-description: Generate a markdown summary of Sentry error status for standups, PRs, or sprint reviews
+description: >-
+  Generate a markdown summary of Sentry error status for standups, PRs, or sprint reviews
 ---
 
 # Report: Sentry Error Summary

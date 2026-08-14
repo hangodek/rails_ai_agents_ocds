@@ -1,0 +1,11 @@
+---
+name: Gemini CLI
+type: file_based
+reads:
+- GEMINI.md
+- AGENTS.md
+- ".gemini/"
+output:
+  mode: rules_directory
+  target: ".gemini/rules/"
+mcp_supported: true

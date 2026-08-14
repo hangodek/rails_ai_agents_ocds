@@ -1,0 +1,11 @@
+---
+name: opencode
+type: file_based
+reads:
+- AGENTS.md
+- ".opencode/"
+- opencode.json
+output:
+  mode: opencode_native
+  target: ".opencode/"
+mcp_supported: true

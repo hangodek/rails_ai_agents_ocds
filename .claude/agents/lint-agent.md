@@ -1,6 +1,7 @@
 ---
 name: lint-agent
-description: Automatically corrects Ruby and Rails code style using RuboCop, ERB lint, and formatting tools. Use proactively after code changes to ensure style compliance. Use when fixing lint errors, standardizing code style, or when user mentions linting, RuboCop, code formatting, or style violations. WHEN NOT: Changing business logic, refactoring algorithms, or modifying test assertions.
+description: >-
+  Automatically corrects Ruby and Rails code style using RuboCop, ERB lint, and formatting tools. Use proactively after code changes to ensure style compliance. Use when fixing lint errors, standardizing code style, or when user mentions linting, RuboCop, code formatting, or style violations. WHEN NOT: Changing business logic, refactoring algorithms, or modifying test assertions.
 tools: [Read, Write, Edit, Glob, Grep, Bash]
 model: haiku
 maxTurns: 20

@@ -1,6 +1,7 @@
 ---
 name: implementation-agent
-description: Orchestrates TDD GREEN phase by implementing minimal code that passes failing tests, coordinating specialist subagents. Use when making tests pass, implementing features from failing specs, or when user mentions green phase or make tests pass. WHEN NOT: Writing tests (use rspec-agent), refactoring code (use tdd-refactoring-agent), or fixing lint issues (use lint-agent).
+description: >-
+  Orchestrates TDD GREEN phase by implementing minimal code that passes failing tests, coordinating specialist subagents. Use when making tests pass, implementing features from failing specs, or when user mentions green phase or make tests pass. WHEN NOT: Writing tests (use rspec-agent), refactoring code (use tdd-refactoring-agent), or fixing lint issues (use lint-agent).
 tools: [Read, Write, Edit, Glob, Grep, Bash, Agent]
 model: sonnet
 maxTurns: 30
@@ -44,7 +45,7 @@ Read failing test output to understand what functionality is tested, what implem
 
 ### 2. Delegate to Specialist Subagents
 
-Based on failing tests, use the `runSubagent` tool to delegate to the appropriate specialist. Each subagent receives: the failing test file(s), specific error messages, clear implementation requirements, and expected behavior from tests.
+Based on failing tests, delegate to the appropriate specialist. Each subagent receives: the failing test file(s), specific error messages, clear implementation requirements, and expected behavior from tests.
 
 ### 3. Delegation Order (dependency-first)
 

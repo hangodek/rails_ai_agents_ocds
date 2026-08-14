@@ -1,0 +1,9 @@
+---
+name: OpenAI Codex CLI
+type: file_based
+reads:
+- AGENTS.md
+- ".agents/skills/"
+output:
+  mode: agents_md_passthrough
+mcp_supported: false

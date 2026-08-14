@@ -1,5 +1,6 @@
 ---
-description: Adversarial review of the feature spec from security, performance, edge-case, scalability, and regulatory perspectives to catch blind spots before planning.
+description: >-
+  Adversarial review of the feature spec from security, performance, edge-case, scalability, and regulatory perspectives to catch blind spots before planning.
 ---
 
 ## User Input

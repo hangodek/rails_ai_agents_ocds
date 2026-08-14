@@ -1,0 +1,9 @@
+---
+name: Antigravity
+type: file_based
+reads:
+- AGENTS.md
+- ".agents/"
+output:
+  mode: agents_md_passthrough
+mcp_supported: true

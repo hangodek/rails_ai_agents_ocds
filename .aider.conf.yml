@@ -1,0 +1,3 @@
+# Aider configuration
+read: CONVENTIONS.md
+auto-commits: false

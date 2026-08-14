@@ -19,8 +19,8 @@ agent:turbo-agent
 agent:viewcomponent-agent
 command:catchup
 command:feature-plan
-command:feature-spec-review
 command:feature-spec
+command:feature-spec-review
 command:feature-tdd-implementation
 command:frame-problem
 command:plan-artifact
@@ -34,8 +34,8 @@ command:sdd/analyze
 command:sdd/checklist
 command:sdd/clarify
 command:sdd/constitution
-command:sdd/implement-subagents
 command:sdd/implement
+command:sdd/implement-subagents
 command:sdd/plan
 command:sdd/spec-review
 command:sdd/specify
@@ -48,9 +48,10 @@ command:sentry/report
 command:sentry/resolve
 rule:anti-patterns
 rule:caveman
-rule:cli-tools
 rule:cli
+rule:cli-tools
 rule:controllers
+rule:design
 rule:jobs
 rule:mailers
 rule:migrations

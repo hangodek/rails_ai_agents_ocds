@@ -1,5 +1,6 @@
 ---
-description: Validate that the codebase implements what the feature spec promises using a 4-layer hybrid analysis — no code annotations required.
+description: >-
+  Validate that the codebase implements what the feature spec promises using a 4-layer hybrid analysis — no code annotations required.
 ---
 
 ## User Input

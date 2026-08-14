@@ -1,8 +1,6 @@
 ---
 description: >-
-  Guides Test-Driven Development workflow with Red-Green-Refactor cycle.
-  Use when the user wants to implement a feature using TDD, write tests first,
-  follow test-driven practices, or mentions red-green-refactor.
+  Guides Test-Driven Development workflow with Red-Green-Refactor cycle. Use when the user wants to implement a feature using TDD, write tests first, follow test-driven practices, or mentions red-green-refactor.
 ---
 
 # TDD Cycle Skill

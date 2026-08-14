@@ -1,5 +1,6 @@
 ---
-description: Execute a small change by processing all tasks sequentially from tasks.md — no subagents, no hooks, no checklists.
+description: >-
+  Execute a small change by processing all tasks sequentially from tasks.md — no subagents, no hooks, no checklists.
 ---
 
 ## User Input

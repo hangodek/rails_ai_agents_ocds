@@ -1,0 +1,29 @@
+# Abstract model tier -> concrete model ID per provider.
+# "inherit" means: use the session/project-level default model.
+tiers:
+  standard:
+    claude: "claude-sonnet-4-5"
+    opencode: "inherit"
+    gemini: "inherit"
+    openai: "inherit"
+    copilot: "inherit"
+    cursor: "inherit"
+    antigravity: "inherit"
+
+  fast:
+    claude: "claude-haiku-4-5"
+    opencode: "inherit"
+    gemini: "inherit"
+    openai: "inherit"
+    copilot: "inherit"
+    cursor: "inherit"
+    antigravity: "inherit"
+
+  powerful:
+    claude: "claude-opus-4-5"
+    opencode: "inherit"
+    gemini: "inherit"
+    openai: "inherit"
+    copilot: "inherit"
+    cursor: "inherit"
+    antigravity: "inherit"

@@ -1,0 +1,9 @@
+---
+name: Continue.dev
+type: file_based
+reads:
+- ".continue/rules/"
+output:
+  mode: rules_directory
+  target: ".continue/rules/"
+mcp_supported: true

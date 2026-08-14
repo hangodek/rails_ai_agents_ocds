@@ -1,5 +1,6 @@
 ---
-description: Resolve, ignore, or reopen a Sentry issue after a fix is deployed
+description: >-
+  Resolve, ignore, or reopen a Sentry issue after a fix is deployed
 ---
 
 # Resolve: Update Sentry Issue Status

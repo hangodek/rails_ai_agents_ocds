@@ -1,5 +1,6 @@
 ---
-description: List all active Sentry fix branches and their status
+description: >-
+  List all active Sentry fix branches and their status
 ---
 
 # Fix Status: Review Active Fix Branches

@@ -1,5 +1,6 @@
 ---
-description: Launch a background agent in an isolated worktree to fix a Sentry error
+description: >-
+  Launch a background agent in an isolated worktree to fix a Sentry error
 ---
 
 # Fix Error: Launch Isolated Fix Agent

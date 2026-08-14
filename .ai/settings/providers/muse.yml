@@ -1,0 +1,8 @@
+---
+name: Muse Code
+type: file_based
+reads:
+- AGENTS.md
+output:
+  mode: agents_md_passthrough
+mcp_supported: false

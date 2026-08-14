@@ -1,0 +1,10 @@
+---
+name: Claude Code
+type: file_based
+reads:
+- CLAUDE.md
+- ".claude/"
+output:
+  mode: claude_native
+  target: ".claude/"
+mcp_supported: true

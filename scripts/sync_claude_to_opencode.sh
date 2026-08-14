@@ -1,7 +1,3 @@
 #!/usr/bin/env bash
-
-set -euo pipefail
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-ruby "${SCRIPT_DIR}/sync_claude_to_opencode.rb"
+echo "[DEPRECATED] scripts/sync_claude_to_opencode.sh is superseded by: ruby scripts/sync_ai_to_all.rb"
+ruby "$(dirname "$0")/sync_ai_to_all.rb" --target=opencode "$@"

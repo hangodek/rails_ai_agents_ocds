@@ -1,11 +1,6 @@
 ---
 description: >-
-  Creates or refines feature specifications with Gherkin scenarios, edge cases,
-  and PR breakdown. Use when specifying a new feature, refining a draft spec,
-  writing requirements, or when user mentions feature specification, requirements
-  gathering, user stories, or specification refinement. WHEN NOT: Reviewing
-  existing specs (use feature-review), planning implementation (use
-  feature-plan), or implementing features directly.
+  Creates or refines feature specifications with Gherkin scenarios, edge cases, and PR breakdown. Use when specifying a new feature, refining a draft spec, writing requirements, or when user mentions feature specification, requirements gathering, user stories, or specification refinement. WHEN NOT: Reviewing existing specs (use feature-review), planning implementation (use feature-plan), or implementing features directly.
 ---
 
 # Feature Specification Writer & Refiner

@@ -1,12 +1,6 @@
 ---
 description: >-
-  Reviews feature specifications for completeness, clarity, and quality.
-  Scores specs, identifies gaps, generates missing Gherkin scenarios, and
-  provides actionable improvement suggestions. Use when the user wants to
-  review a feature spec, validate requirements, or mentions spec review,
-  specification quality, or requirements validation. WHEN NOT: Writing
-  specifications (use feature-spec), planning implementation (use
-  feature-plan), or implementing features directly.
+  Reviews feature specifications for completeness, clarity, and quality. Scores specs, identifies gaps, generates missing Gherkin scenarios, and provides actionable improvement suggestions. Use when the user wants to review a feature spec, validate requirements, or mentions spec review, specification quality, or requirements validation. WHEN NOT: Writing specifications (use feature-spec), planning implementation (use feature-plan), or implementing features directly.
 ---
 
 # Feature Specification Reviewer

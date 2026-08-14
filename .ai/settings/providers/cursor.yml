@@ -1,0 +1,10 @@
+---
+name: Cursor
+type: file_based
+reads:
+- AGENTS.md
+- ".cursor/rules/*.mdc"
+output:
+  mode: mdc_directory
+  target: ".cursor/rules/"
+mcp_supported: true

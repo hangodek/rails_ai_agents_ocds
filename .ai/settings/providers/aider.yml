@@ -1,0 +1,11 @@
+---
+name: Aider
+type: file_based
+reads:
+- CONVENTIONS.md
+- AGENTS.md
+- ".aider.conf.yml"
+output:
+  mode: single_rules_file
+  target: CONVENTIONS.md
+mcp_supported: false

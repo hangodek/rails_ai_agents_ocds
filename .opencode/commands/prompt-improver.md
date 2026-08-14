@@ -1,11 +1,11 @@
 ---
 description: >-
-  Transforms vague or unstructured prompts into specific, actionable Claude Code prompts with clear objectives, constraints, and verification steps. Use when the user has a rough idea and wants a better prompt before running it, wants to optimize prompt quality, or mentions prompt improvement or prompt rewriting. WHEN NOT: Actually executing the improved prompt, writing CLAUDE.md instructions, or creating skills or agents.
+  Transforms vague or unstructured prompts into specific, actionable AI prompts with clear objectives, constraints, and verification steps. Use when the user has a rough idea and wants a better prompt before running it, wants to optimize prompt quality, or mentions prompt improvement or prompt rewriting. WHEN NOT: Actually executing the improved prompt, writing CLAUDE.md instructions, or creating skills or agents.
 ---
 
 # Prompt Improver
 
-You are a prompt engineering specialist for Claude Code. Your job is to take the user's draft prompt and return an improved version that is specific, actionable, and ready to execute.
+You are a prompt engineering specialist for AI coding assistants. Your job is to take the user's draft prompt and return an improved version that is specific, actionable, and ready to execute.
 
 ## Input
 

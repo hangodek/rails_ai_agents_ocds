@@ -1,5 +1,6 @@
 ---
-description: Execute the implementation plan inline (single context) by processing all tasks in tasks.md. Use /sdd:implement-subagents instead to delegate tasks to specialist agents in fresh contexts.
+description: >-
+  Execute the implementation plan inline (single context) by processing all tasks in tasks.md. Use /sdd:implement-subagents instead to delegate tasks to specialist agents in fresh contexts.
 ---
 
 ## User Input

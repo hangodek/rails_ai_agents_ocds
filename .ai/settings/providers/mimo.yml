@@ -1,0 +1,9 @@
+---
+name: MiMo Code
+type: file_based
+reads:
+- AGENTS.md
+- CLAUDE.md
+output:
+  mode: agents_md_passthrough
+mcp_supported: true

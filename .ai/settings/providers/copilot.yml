@@ -1,0 +1,11 @@
+---
+name: GitHub Copilot
+type: file_based
+reads:
+- AGENTS.md
+- ".github/copilot-instructions.md"
+- ".github/instructions/"
+output:
+  mode: bridge_files
+  target: ".github/instructions/"
+mcp_supported: false

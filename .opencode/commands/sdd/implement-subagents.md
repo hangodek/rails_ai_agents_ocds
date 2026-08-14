@@ -1,5 +1,6 @@
 ---
-description: Execute the implementation plan by delegating each task in tasks.md to the matching specialist agent (model-agent, service-agent, rspec-agent, ...) in a fresh context, orchestrated phase-by-phase. Use /sdd:implement for inline single-context execution instead.
+description: >-
+  Execute the implementation plan by delegating each task in tasks.md to the matching specialist agent (model-agent, service-agent, rspec-agent, ...) in a fresh context, orchestrated phase-by-phase. Use /sdd:implement for inline single-context execution instead.
 ---
 
 ## User Input

@@ -1,11 +1,6 @@
 ---
 description: >-
-  Challenges stakeholder requests to identify real needs and propose optimal
-  solutions. Use when receiving vague feature requests, reframing a problem
-  before implementation, or when user mentions problem framing, XY problem,
-  stakeholder request, or solution discovery. WHEN NOT: Well-defined technical
-  tasks with clear requirements, bug fixes with known root causes, or routine
-  CRUD operations.
+  Challenges stakeholder requests to identify real needs and propose optimal solutions. Use when receiving vague feature requests, reframing a problem before implementation, or when user mentions problem framing, XY problem, stakeholder request, or solution discovery. WHEN NOT: Well-defined technical tasks with clear requirements, bug fixes with known root causes, or routine CRUD operations.
 ---
 
 # Problem Framing & Solution Discovery

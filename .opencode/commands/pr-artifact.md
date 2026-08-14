@@ -1,5 +1,6 @@
 ---
-description: Creates one polished, self-contained HTML artifact that explains a pull request or code change for reviewers, maintainers, product partners, and stakeholders.
+description: >-
+  Creates one polished, self-contained HTML artifact that explains a pull request or code change for reviewers, maintainers, product partners, and stakeholders.
 ---
 
 # Presenting Pull Requests

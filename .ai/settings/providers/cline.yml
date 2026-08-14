@@ -1,0 +1,10 @@
+---
+name: Cline
+type: file_based
+reads:
+- AGENTS.md
+- ".clinerules/"
+output:
+  mode: rules_directory
+  target: ".clinerules/"
+mcp_supported: true

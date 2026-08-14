@@ -1,0 +1,22 @@
+defaults:
+  tools: [Read, Write, Edit, Glob, Grep, Bash]
+  permissionMode: acceptEdits
+  memory: project
+
+overrides:
+  implementation-agent:
+    tools: [Read, Write, Edit, Glob, Grep, Bash, Agent]
+    isolation: worktree
+    skills:
+      - rails-architecture
+  controller-agent:
+    skills:
+      - api-versioning
+  job-agent:
+    skills:
+      - solid-queue-setup
+  turbo-agent:
+    skills:
+      - action-cable-patterns
+  lint-agent:
+    effort: low

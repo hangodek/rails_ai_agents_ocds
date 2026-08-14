@@ -1,0 +1,10 @@
+---
+name: Windsurf
+type: file_based
+reads:
+- AGENTS.md
+- ".windsurfrules"
+output:
+  mode: single_rules_file
+  target: ".windsurfrules"
+mcp_supported: false

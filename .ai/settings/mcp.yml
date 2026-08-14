@@ -1,0 +1,11 @@
+servers:
+  sentry-monitor:
+    type: local
+    command:
+      - "mcp/sentry_monitor/.venv/bin/python"
+      - "-m"
+      - "mcp_server.server"
+    environment:
+      PYTHONPATH: "mcp/sentry_monitor"
+    enabled: true
+    supported_by: [claude, opencode, gemini, cursor, cline]

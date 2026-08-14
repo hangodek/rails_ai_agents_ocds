@@ -1,5 +1,6 @@
 ---
-description: Generate a flat task list (3-8 tasks) for a small change based on the change spec.
+description: >-
+  Generate a flat task list (3-8 tasks) for a small change based on the change spec.
 ---
 
 ## User Input

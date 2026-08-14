@@ -40,7 +40,7 @@ Read failing test output to understand what functionality is tested, what implem
 
 ### 2. Delegate to Specialist Subagents
 
-Based on failing tests, use the `runSubagent` tool to delegate to the appropriate specialist. Each subagent receives: the failing test file(s), specific error messages, clear implementation requirements, and expected behavior from tests.
+Based on failing tests, delegate to the appropriate specialist. Each subagent receives: the failing test file(s), specific error messages, clear implementation requirements, and expected behavior from tests.
 
 ### 3. Delegation Order (dependency-first)
 
