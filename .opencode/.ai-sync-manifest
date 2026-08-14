@@ -51,7 +51,6 @@ rule:caveman
 rule:cli
 rule:cli-tools
 rule:controllers
-rule:design
 rule:jobs
 rule:mailers
 rule:migrations

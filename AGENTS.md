@@ -65,7 +65,6 @@ Follow **TDD: Red -> Green -> Refactor**:
 - **Services:** `.call` class method, return Result objects, namespace by domain (`Entities::CreateService`).
 - **No premature abstraction:** Don't extract until complexity demands it. Three similar lines > wrong abstraction.
 - **Explicit > implicit:** Clear service calls over hidden callbacks. Named methods over metaprogramming.
-- **Design compliance:** Every styling and theme (Tailwind classes, colors, components, layouts) MUST follow `DESIGN.md` at the repo root. No custom colors, fonts, spacing, or component styles outside what `DESIGN.md` defines.
 
 See @docs/rails-development-principles.md for the complete development principles guide.
 

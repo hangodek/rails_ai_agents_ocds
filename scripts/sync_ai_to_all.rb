@@ -54,6 +54,11 @@ def write_file(path, content)
   File.write(path, content)
 end
 
+def clean_and_recreate_dir(path)
+  FileUtils.rm_rf(path)
+  FileUtils.mkdir_p(path)
+end
+
 def resolved_model(tier, provider)
   TIERS.dig("tiers", tier, provider) || "inherit"
 end
@@ -63,10 +68,10 @@ end
 def sync_claude
   puts "Syncing Claude Code (.claude/)..."
   target_dir = File.join(REPO_ROOT, ".claude")
-  FileUtils.mkdir_p(File.join(target_dir, "agents"))
-  FileUtils.mkdir_p(File.join(target_dir, "commands"))
-  FileUtils.mkdir_p(File.join(target_dir, "rules"))
-  FileUtils.mkdir_p(File.join(target_dir, "skills"))
+  clean_and_recreate_dir(File.join(target_dir, "agents"))
+  clean_and_recreate_dir(File.join(target_dir, "commands"))
+  clean_and_recreate_dir(File.join(target_dir, "rules"))
+  clean_and_recreate_dir(File.join(target_dir, "skills"))
 
   defaults = CLAUDE_EXTRAS["defaults"] || {
     "tools" => %w[Read Write Edit Glob Grep Bash],
@@ -75,6 +80,7 @@ def sync_claude
   }
   overrides = CLAUDE_EXTRAS["overrides"] || {}
 
+  agent_count = 0
   # Agents
   Dir.glob(File.join(AI_DIR, "agents", "*.md")).sort.each do |file|
     name = File.basename(file, ".md")
@@ -83,8 +89,7 @@ def sync_claude
 
     tier = data["model_tier"] || "standard"
     model = resolved_model(tier, "claude")
-    model = "sonnet" if model == "inherit" || model.nil? # default fallback
-    # Map back short names if desired or concrete names
+    model = "sonnet" if model == "inherit" || model.nil?
     model_name = case model
                  when /haiku/ then "haiku"
                  when /opus/ then "opus"
@@ -98,7 +103,16 @@ def sync_claude
     mem = extra["memory"] || defaults["memory"]
     max_turns = data["maxTurns"] || 30
 
-    fm_out = ["name: #{name}", "description: >-", "  #{data['description'] || ''}".rstrip, "tools: [#{tools.join(', ')}]", "model: #{model_name}", "maxTurns: #{max_turns}", "permissionMode: #{perm}", "memory: #{mem}"]
+    fm_out = [
+      "name: #{name}",
+      "description: >-",
+      "  #{data['description'] || ''}".rstrip,
+      "tools: [#{tools.join(', ')}]",
+      "model: #{model_name}",
+      "maxTurns: #{max_turns}",
+      "permissionMode: #{perm}",
+      "memory: #{mem}"
+    ]
     fm_out << "isolation: #{extra['isolation']}" if extra["isolation"]
     fm_out << "effort: #{extra['effort']}" if extra["effort"]
     if extra["skills"]
@@ -108,6 +122,7 @@ def sync_claude
 
     out_content = "---\n#{fm_out.join("\n")}\n---\n\n#{body.strip}\n"
     write_file(File.join(target_dir, "agents", "#{name}.md"), out_content)
+    agent_count += 1
   end
 
   # Copy references
@@ -121,8 +136,11 @@ def sync_claude
   FileUtils.cp_r(File.join(AI_DIR, "commands"), File.join(target_dir, "commands"))
 
   # Copy rules
-  FileUtils.rm_rf(File.join(target_dir, "rules"))
-  FileUtils.cp_r(File.join(AI_DIR, "rules"), File.join(target_dir, "rules"))
+  rule_count = 0
+  Dir.glob(File.join(AI_DIR, "rules", "*.md")).sort.each do |file|
+    FileUtils.cp(file, File.join(target_dir, "rules", File.basename(file)))
+    rule_count += 1
+  end
 
   # Copy skills
   FileUtils.rm_rf(File.join(target_dir, "skills"))
@@ -208,7 +226,7 @@ def sync_claude
 
   # CLAUDE.md entry point
   File.write(File.join(REPO_ROOT, "CLAUDE.md"), "@AGENTS.md\n")
-  puts "  Synced 19 agents, rules, commands, skills, settings.json, CLAUDE.md"
+  puts "  Synced #{agent_count} agents, #{rule_count} rules, commands, skills, settings.json, CLAUDE.md"
 end
 
 # --- 2. opencode (.opencode/) ---
@@ -233,9 +251,9 @@ def sync_opencode
   manifest_path = File.join(target_dir, ".ai-sync-manifest")
   skills_target_dir = File.join(REPO_ROOT, ".agents", "skills")
 
-  FileUtils.mkdir_p(File.join(target_dir, "agents"))
-  FileUtils.mkdir_p(File.join(target_dir, "commands"))
-  FileUtils.mkdir_p(File.join(target_dir, "rules"))
+  clean_and_recreate_dir(File.join(target_dir, "agents"))
+  clean_and_recreate_dir(File.join(target_dir, "commands"))
+  clean_and_recreate_dir(File.join(target_dir, "rules"))
   FileUtils.mkdir_p(skills_target_dir)
 
   manifest_entries = []
@@ -303,11 +321,11 @@ def sync_opencode
     manifest_entries << "skill:#{name}"
   end
 
-  # Write manifest
+  # Write manifest and remove old claude manifest
   File.write(manifest_path, manifest_entries.sort.join("\n") + "\n")
-  # Remove old manifest if present
-  old_manifest = File.join(target_dir, ".claude-sync-manifest")
-  FileUtils.rm_f(old_manifest)
+  FileUtils.rm_f(File.join(target_dir, ".claude-sync-manifest"))
+  FileUtils.rm_f(File.join(skills_target_dir, ".claude-sync-manifest"))
+  File.write(File.join(skills_target_dir, ".ai-sync-manifest"), manifest_entries.select { |e| e.start_with?("skill:") }.join("\n") + "\n")
 
   # Regenerate opencode.json
   opencode_json = {
@@ -341,14 +359,14 @@ def sync_gemini_and_antigravity
   gemini_dir = File.join(REPO_ROOT, ".gemini")
   agents_dir = File.join(REPO_ROOT, ".agents")
 
-  FileUtils.mkdir_p(File.join(gemini_dir, "rules"))
-  FileUtils.mkdir_p(File.join(gemini_dir, "agents"))
-  FileUtils.mkdir_p(File.join(agents_dir, "rules"))
-  FileUtils.mkdir_p(File.join(agents_dir, "references"))
+  clean_and_recreate_dir(File.join(gemini_dir, "rules"))
+  clean_and_recreate_dir(File.join(gemini_dir, "agents"))
+  clean_and_recreate_dir(File.join(agents_dir, "rules"))
 
   # GEMINI.md pointer
   File.write(File.join(REPO_ROOT, "GEMINI.md"), "@AGENTS.md\n")
 
+  rule_count = 0
   # Rules
   Dir.glob(File.join(AI_DIR, "rules", "*.md")).sort.each do |file|
     name = File.basename(file, ".md")
@@ -356,8 +374,10 @@ def sync_gemini_and_antigravity
     content = body.strip + "\n"
     File.write(File.join(gemini_dir, "rules", "#{name}.md"), content)
     File.write(File.join(agents_dir, "rules", "#{name}.md"), content)
+    rule_count += 1
   end
 
+  agent_count = 0
   # Agents
   Dir.glob(File.join(AI_DIR, "agents", "*.md")).sort.each do |file|
     name = File.basename(file, ".md")
@@ -372,16 +392,17 @@ def sync_gemini_and_antigravity
     ]
     out = "---\n#{fm_out.join("\n")}\n---\n\n#{adapted_body.strip}\n"
     File.write(File.join(gemini_dir, "agents", "#{name}.md"), out)
+    agent_count += 1
   end
 
   # References
   if Dir.exist?(File.join(AI_DIR, "agents", "references"))
-    FileUtils.rm_rf(File.join(gemini_dir, "agents", "references"))
-    FileUtils.cp_r(File.join(AI_DIR, "agents", "references"), File.join(gemini_dir, "agents", "references"))
-    FileUtils.rm_rf(File.join(agents_dir, "references"))
-    FileUtils.cp_r(File.join(AI_DIR, "agents", "references"), File.join(agents_dir, "references"))
+    clean_and_recreate_dir(File.join(gemini_dir, "agents", "references"))
+    FileUtils.cp_r(File.join(AI_DIR, "agents", "references", "."), File.join(gemini_dir, "agents", "references"))
+    clean_and_recreate_dir(File.join(agents_dir, "references"))
+    FileUtils.cp_r(File.join(AI_DIR, "agents", "references", "."), File.join(agents_dir, "references"))
   end
-  puts "  Synced .gemini/ and .agents/ rules/references"
+  puts "  Synced #{agent_count} agents and #{rule_count} rules for .gemini/ and .agents/"
 end
 
 # --- 4. Cursor (.cursor/rules/*.mdc) ---
@@ -389,8 +410,9 @@ end
 def sync_cursor
   puts "Syncing Cursor (.cursor/rules/*.mdc)..."
   cursor_dir = File.join(REPO_ROOT, ".cursor", "rules")
-  FileUtils.mkdir_p(cursor_dir)
+  clean_and_recreate_dir(cursor_dir)
 
+  rule_count = 0
   Dir.glob(File.join(AI_DIR, "rules", "*.md")).sort.each do |file|
     name = File.basename(file, ".md")
     fm_lines, body = split_frontmatter(file)
@@ -406,24 +428,30 @@ def sync_cursor
     ]
     content = "---\n#{mdc_fm.join("\n")}\n---\n\n<!-- Generated from .ai/rules/#{name}.md -->\n\n#{body.strip}\n"
     File.write(File.join(cursor_dir, "#{name}.mdc"), content)
+    rule_count += 1
   end
-  puts "  Synced 16 .mdc rule files in .cursor/rules/"
+  puts "  Synced #{rule_count} .mdc rule files in .cursor/rules/"
 end
 
 # --- 5. Windsurf (.windsurfrules) ---
 
 def sync_windsurf
   puts "Syncing Windsurf (.windsurfrules)..."
-  rules_content = ["# Rails Development Conventions and Rules\n", "<!-- Generated by scripts/sync_ai_to_all.rb from .ai/rules/ -->\n"]
+  rules_content = [
+    "# Rails Development Conventions and Rules\n",
+    "<!-- Generated by scripts/sync_ai_to_all.rb from .ai/rules/ -->\n"
+  ]
 
+  rule_count = 0
   Dir.glob(File.join(AI_DIR, "rules", "*.md")).sort.each do |file|
     name = File.basename(file, ".md")
     _fm, body = split_frontmatter(file)
     rules_content << "## #{name.capitalize} Rules\n\n#{body.strip}\n\n---\n"
+    rule_count += 1
   end
 
   File.write(File.join(REPO_ROOT, ".windsurfrules"), rules_content.join("\n"))
-  puts "  Generated .windsurfrules"
+  puts "  Generated .windsurfrules (#{rule_count} rules)"
 end
 
 # --- 6. Cline (.clinerules/) ---
@@ -431,15 +459,17 @@ end
 def sync_cline
   puts "Syncing Cline (.clinerules/)..."
   cline_dir = File.join(REPO_ROOT, ".clinerules")
-  FileUtils.mkdir_p(cline_dir)
+  clean_and_recreate_dir(cline_dir)
 
+  rule_count = 0
   Dir.glob(File.join(AI_DIR, "rules", "*.md")).sort.each do |file|
     name = File.basename(file, ".md")
     _fm, body = split_frontmatter(file)
     content = "<!-- Generated from .ai/rules/#{name}.md -->\n\n#{body.strip}\n"
     File.write(File.join(cline_dir, "#{name}.md"), content)
+    rule_count += 1
   end
-  puts "  Generated 16 rules in .clinerules/"
+  puts "  Generated #{rule_count} rules in .clinerules/"
 end
 
 # --- 7. Continue.dev (.continue/rules/) ---
@@ -447,15 +477,17 @@ end
 def sync_continue
   puts "Syncing Continue.dev (.continue/rules/)..."
   continue_dir = File.join(REPO_ROOT, ".continue", "rules")
-  FileUtils.mkdir_p(continue_dir)
+  clean_and_recreate_dir(continue_dir)
 
+  rule_count = 0
   Dir.glob(File.join(AI_DIR, "rules", "*.md")).sort.each do |file|
     name = File.basename(file, ".md")
     _fm, body = split_frontmatter(file)
     content = "<!-- Generated from .ai/rules/#{name}.md -->\n\n#{body.strip}\n"
     File.write(File.join(continue_dir, "#{name}.md"), content)
+    rule_count += 1
   end
-  puts "  Generated 16 rules in .continue/rules/"
+  puts "  Generated #{rule_count} rules in .continue/rules/"
 end
 
 # --- 8. Aider (CONVENTIONS.md, .aider.conf.yml) ---
@@ -467,10 +499,12 @@ def sync_aider
     "<!-- Generated by scripts/sync_ai_to_all.rb from .ai/rules/ -->\n"
   ]
 
+  rule_count = 0
   Dir.glob(File.join(AI_DIR, "rules", "*.md")).sort.each do |file|
     name = File.basename(file, ".md")
     _fm, body = split_frontmatter(file)
     conventions_content << "## #{name.capitalize} Rules\n\n#{body.strip}\n\n---\n"
+    rule_count += 1
   end
 
   File.write(File.join(REPO_ROOT, "CONVENTIONS.md"), conventions_content.join("\n"))
@@ -481,7 +515,7 @@ def sync_aider
     auto-commits: false
   YAML
   File.write(File.join(REPO_ROOT, ".aider.conf.yml"), aider_conf)
-  puts "  Generated CONVENTIONS.md and .aider.conf.yml"
+  puts "  Generated CONVENTIONS.md (#{rule_count} rules) and .aider.conf.yml"
 end
 
 # --- 9. GitHub Copilot (.github/instructions/) ---
@@ -489,8 +523,9 @@ end
 def sync_copilot
   puts "Syncing GitHub Copilot..."
   instructions_dir = File.join(REPO_ROOT, ".github", "instructions", "rules")
-  FileUtils.mkdir_p(instructions_dir)
+  clean_and_recreate_dir(instructions_dir)
 
+  rule_count = 0
   Dir.glob(File.join(AI_DIR, "rules", "*.md")).sort.each do |file|
     name = File.basename(file, ".md")
     fm_lines, _body = split_frontmatter(file)
@@ -511,6 +546,7 @@ def sync_copilot
       Read and apply `.ai/rules/#{name}.md` before editing files matching this scope.
     MD
     File.write(File.join(instructions_dir, "#{name}.instructions.md"), content)
+    rule_count += 1
   end
 
   # Update .github/copilot-instructions.md
@@ -536,7 +572,7 @@ def sync_copilot
     Run `ruby scripts/sync_ai_to_all.rb` after adding, removing, or renaming a rule or skill.
   MD
   File.write(File.join(REPO_ROOT, ".github", "copilot-instructions.md"), copilot_main)
-  puts "  Generated Copilot bridge files and updated copilot-instructions.md"
+  puts "  Generated #{rule_count} Copilot bridge files and updated copilot-instructions.md"
 end
 
 # --- 10. Universal Context Bundle (AI_CONTEXT.md) ---
@@ -549,11 +585,13 @@ def generate_context_bundle
   bundle << "> **How to use:** Paste this file's content into any chat AI (Kimi, ChatGPT, Ling, Muse AI, Claude web, Gemini web, or API system prompt) to give it full project awareness."
   bundle << "> **Source of truth:** `.ai/` | Generated automatically by `scripts/sync_ai_to_all.rb`.\n"
 
-  # 1. Project Overview (AGENTS.md excerpt)
+  # 1. Project Overview (extract developer-facing sections of AGENTS.md before internal AI Tooling table)
   if File.exist?(File.join(REPO_ROOT, "AGENTS.md"))
     agents_md = File.read(File.join(REPO_ROOT, "AGENTS.md"))
+    # Extract only tech stack, architecture, commands, workflow, conventions (stop before ## AI Tooling)
+    dev_content = agents_md.split(/^## AI Tooling/)[0].strip
     bundle << "## 1. Project Overview & Architecture\n"
-    bundle << agents_md
+    bundle << dev_content
     bundle << "\n---\n"
   end
 

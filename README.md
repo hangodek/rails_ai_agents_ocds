@@ -1,6 +1,6 @@
 # Rails AI Agents
 
-A production-ready, universal AI coding agent setup for Ruby on Rails development: **19 specialized agents**, **26 slash commands** (including the [SDD kit](#spec-driven-development-sdd-kit)), **18 skills**, **16 rules**, **1 MCP**, and universal lifecycle hooks. Ships with **`.ai/` as the single canonical source of truth** and automatically syncs to **any AI assistant or coding platform** — Claude Code, opencode (DeepSeek, etc.), Antigravity/Gemini, Cursor, Windsurf, Cline, Continue.dev, Aider, GitHub Copilot, MiMo Code, Kimi Code, Muse Code, and any chat-based AI (ChatGPT, Kimi, Ling, etc.) via `AI_CONTEXT.md`. Drop it into your project and your AI assistant instantly knows Rails conventions, TDD workflows, and production patterns.
+A production-ready, universal AI coding agent setup for Ruby on Rails development: **19 specialized agents**, **26 slash commands** (including the [SDD kit](#spec-driven-development-sdd-kit)), **18 skills**, **15 rules**, **1 MCP**, and universal lifecycle hooks. Ships with **`.ai/` as the single canonical source of truth** and automatically syncs to **any AI assistant or coding platform** — Claude Code, opencode (DeepSeek, etc.), Antigravity/Gemini, Cursor, Windsurf, Cline, Continue.dev, Aider, GitHub Copilot, MiMo Code, Kimi Code, Muse Code, and any chat-based AI (ChatGPT, Kimi, Ling, etc.) via `AI_CONTEXT.md`. Drop it into your project and your AI assistant instantly knows Rails conventions, TDD workflows, and production patterns.
 
 Also includes:
 - [Spec Driven Development (SDD) kit](#spec-driven-development-sdd-kit) — a full specification-to-implementation pipeline + lightweight mode for bug fixes.
@@ -8,31 +8,37 @@ Also includes:
 - [Multi-Provider & Universal AI Support](#multi-provider-and-universal-ai-support) — auto-synced across all AI tools.
 - Universal context bundle (`AI_CONTEXT.md`) for any web chat AI or custom system prompt.
 
-## Quick Start
+## One-Line Setup for New Projects
+
+To install this AI agent setup into **any new or existing Rails project** with zero manual copy-pasting:
 
 ```bash
-# Copy the canonical .ai/ directory and root entry points into your Rails project
-cp -r .ai/ AGENTS.md /path/to/your-rails-app/
-
-# In your rails app, generate all provider targets (Claude, Cursor, opencode, Gemini, etc.):
-ruby scripts/sync_ai_to_all.rb
+# Run inside your Rails app directory:
+curl -fsSL https://raw.githubusercontent.com/hangodek/rails_ai_agents_ocds/main/install.sh | bash
 ```
 
-| If you use... | What it needs | Auto-Load Mechanism |
-|---|---|---|
-| **Claude Code** | `.claude/`, `CLAUDE.md` | Auto-detects `CLAUDE.md` / `.claude/` |
-| **opencode** (DeepSeek, etc.) | `.opencode/`, `opencode.json`, `AGENTS.md` | Auto-loads `opencode.json` instructions |
-| **Antigravity** (Google Gemini) | `.agents/`, `AGENTS.md` | Native `AGENTS.md` discovery |
-| **Gemini CLI** | `.gemini/`, `GEMINI.md` | Auto-detects `GEMINI.md` |
-| **Cursor** | `.cursor/rules/*.mdc`, `AGENTS.md` | Auto-loads `.cursor/rules/` & `AGENTS.md` |
-| **Windsurf** | `.windsurfrules`, `AGENTS.md` | Auto-loads `.windsurfrules` & `AGENTS.md` |
-| **Cline** | `.clinerules/`, `AGENTS.md` | Auto-loads `.clinerules/` & `AGENTS.md` |
-| **Continue.dev** | `.continue/rules/` | Auto-loads `.continue/rules/` |
-| **Aider** | `CONVENTIONS.md`, `.aider.conf.yml` | Auto-reads `CONVENTIONS.md` |
-| **GitHub Copilot** | `.github/instructions/`, `AGENTS.md` | Auto-reads instructions & `AGENTS.md` |
-| **MiMo Code / Kimi Code / Muse Code** | `AGENTS.md`, `CLAUDE.md` | Native `AGENTS.md` discovery |
-| **Chat AIs** (Kimi, Ling, ChatGPT, Claude.ai, Gemini web) | `AI_CONTEXT.md` | Paste `AI_CONTEXT.md` or set as system prompt |
-| **37signals-style conventions** | `.ai_37signals/` **instead of** `.ai/` | Rich models, concerns, Minitest |
+This single command:
+1. Downloads the canonical `.ai/` directory and sync scripts.
+2. Automatically generates native configs for all AI tools (Cursor, Claude, Windsurf, opencode, Gemini, etc.).
+3. Configures `.gitignore` to keep generated configs out of your repo — keeping your git history clean.
+
+## Multi-Provider Support Matrix
+
+| Platform / Tool | Type | Integration Point | Auto-Load Mechanism |
+|---|---|---|---|
+| **Claude Code** | CLI / Agent | `.claude/`, `CLAUDE.md` | Auto-detects `CLAUDE.md` / `.claude/` |
+| **opencode** (DeepSeek, etc.) | CLI / Agent | `.opencode/`, `opencode.json`, `AGENTS.md` | Auto-loads `opencode.json` instructions |
+| **Antigravity** (Google Gemini) | IDE / Agent | `.agents/`, `AGENTS.md` | Native `AGENTS.md` discovery |
+| **Gemini CLI** | CLI / Agent | `.gemini/`, `GEMINI.md` | Auto-detects `GEMINI.md` |
+| **Cursor** | IDE | `.cursor/rules/*.mdc`, `AGENTS.md` | Auto-loads `.cursor/rules/` & `AGENTS.md` |
+| **Windsurf** | IDE | `.windsurfrules`, `AGENTS.md` | Auto-loads `.windsurfrules` & `AGENTS.md` |
+| **Cline** | IDE Ext | `.clinerules/`, `AGENTS.md` | Auto-loads `.clinerules/` & `AGENTS.md` |
+| **Continue.dev** | IDE Ext | `.continue/rules/` | Auto-loads `.continue/rules/` |
+| **Aider** | CLI | `CONVENTIONS.md`, `.aider.conf.yml` | Auto-reads `CONVENTIONS.md` |
+| **GitHub Copilot** | IDE Ext | `.github/instructions/`, `AGENTS.md` | Auto-reads instructions & `AGENTS.md` |
+| **MiMo Code / Kimi Code / Muse Code** | CLI / Agent | `AGENTS.md`, `CLAUDE.md` | Native `AGENTS.md` discovery |
+| **Chat AIs** (Kimi, Ling, ChatGPT, Claude.ai, Gemini web) | Web Chat / API | `AI_CONTEXT.md` | Paste `AI_CONTEXT.md` or set as system prompt |
+| **37signals-style conventions** | Pack | `.ai_37signals/` | Rich models, concerns, Minitest |
 
 ## Multi-Provider and Universal AI Support
 
@@ -41,9 +47,9 @@ This repo uses **`.ai/` as the universal source of truth**. Abstract model tiers
 **One command keeps all AI configurations in sync:**
 
 ```bash
-ruby scripts/sync_ai_to_all.rb
-# or simply:
 scripts/sync_all.sh
+# or:
+ruby scripts/sync_ai_to_all.rb
 ```
 
 Restart your AI tool or reload the chat session after syncing to pick up updates.
