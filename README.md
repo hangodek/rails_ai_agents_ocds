@@ -1,342 +1,127 @@
-# Rails AI Agents
+# Rails AI Agents (Universal Multi-AI Edition)
 
-A production-ready, universal AI coding agent setup for Ruby on Rails development: **19 specialized agents**, **26 slash commands** (including the [SDD kit](#spec-driven-development-sdd-kit)), **18 skills**, **15 rules**, **1 MCP**, and universal lifecycle hooks. Ships with **`.ai/` as the single canonical source of truth** and automatically syncs to **any AI assistant or coding platform** — Claude Code, opencode (DeepSeek, etc.), Antigravity/Gemini, Cursor, Windsurf, Cline, Continue.dev, Aider, GitHub Copilot, MiMo Code, Kimi Code, Muse Code, and any chat-based AI (ChatGPT, Kimi, Ling, etc.) via `AI_CONTEXT.md`. Drop it into your project and your AI assistant instantly knows Rails conventions, TDD workflows, and production patterns.
+> 🚀 **A universal, provider-agnostic AI coding agent setup for Ruby on Rails.**
+> Forked from the original Rails AI Agents project and enhanced with a universal sync engine, abstract model tiers, and automated multi-tool configuration.
 
-Also includes:
-- [Spec Driven Development (SDD) kit](#spec-driven-development-sdd-kit) — a full specification-to-implementation pipeline + lightweight mode for bug fixes.
-- a separate 37signals-style conventions pack (`.ai_37signals/`) for teams that prefer rich models + Minitest over the default layered setup.
-- [Multi-Provider & Universal AI Support](#multi-provider-and-universal-ai-support) — auto-synced across all AI tools.
-- Universal context bundle (`AI_CONTEXT.md`) for any web chat AI or custom system prompt.
+Drop this into any Rails 8/7 project and your AI assistant instantly knows your architecture, TDD workflows, naming conventions, and production Rails patterns.
 
-## One-Line Setup for New Projects
+---
 
-To install this AI agent setup into **any new or existing Rails project** with zero manual copy-pasting:
+## ⚡ Quick Start (New or Existing Project)
+
+Install the entire setup into your Rails project in **5 seconds with zero manual copy-pasting**:
 
 ```bash
-# Run inside your Rails app directory:
+# Run this inside your Rails project root:
 curl -fsSL https://raw.githubusercontent.com/hangodek/rails_ai_agents_ocds/main/install.sh | bash
 ```
 
-This single command:
-1. Downloads the canonical `.ai/` directory and sync scripts.
-2. Automatically generates native configs for all AI tools (Cursor, Claude, Windsurf, opencode, Gemini, etc.).
-3. Configures `.gitignore` to keep generated configs out of your repo — keeping your git history clean.
+**What this does:**
+1. Downloads the canonical `.ai/` configuration.
+2. Automatically generates native config files for all your AI tools (Cursor, Claude, opencode, Windsurf, Gemini, etc.).
+3. Appends generated files to `.gitignore` so your repository stays clean and uncluttered.
 
-## Multi-Provider Support Matrix
+---
 
-| Platform / Tool | Type | Integration Point | Auto-Load Mechanism |
-|---|---|---|---|
-| **Claude Code** | CLI / Agent | `.claude/`, `CLAUDE.md` | Auto-detects `CLAUDE.md` / `.claude/` |
-| **opencode** (DeepSeek, etc.) | CLI / Agent | `.opencode/`, `opencode.json`, `AGENTS.md` | Auto-loads `opencode.json` instructions |
-| **Antigravity** (Google Gemini) | IDE / Agent | `.agents/`, `AGENTS.md` | Native `AGENTS.md` discovery |
-| **Gemini CLI** | CLI / Agent | `.gemini/`, `GEMINI.md` | Auto-detects `GEMINI.md` |
-| **Cursor** | IDE | `.cursor/rules/*.mdc`, `AGENTS.md` | Auto-loads `.cursor/rules/` & `AGENTS.md` |
-| **Windsurf** | IDE | `.windsurfrules`, `AGENTS.md` | Auto-loads `.windsurfrules` & `AGENTS.md` |
-| **Cline** | IDE Ext | `.clinerules/`, `AGENTS.md` | Auto-loads `.clinerules/` & `AGENTS.md` |
-| **Continue.dev** | IDE Ext | `.continue/rules/` | Auto-loads `.continue/rules/` |
-| **Aider** | CLI | `CONVENTIONS.md`, `.aider.conf.yml` | Auto-reads `CONVENTIONS.md` |
-| **GitHub Copilot** | IDE Ext | `.github/instructions/`, `AGENTS.md` | Auto-reads instructions & `AGENTS.md` |
-| **MiMo Code / Kimi Code / Muse Code** | CLI / Agent | `AGENTS.md`, `CLAUDE.md` | Native `AGENTS.md` discovery |
-| **Chat AIs** (Kimi, Ling, ChatGPT, Claude.ai, Gemini web) | Web Chat / API | `AI_CONTEXT.md` | Paste `AI_CONTEXT.md` or set as system prompt |
-| **37signals-style conventions** | Pack | `.ai_37signals/` | Rich models, concerns, Minitest |
+## 🛠️ Supported AI Tools & Platforms
 
-## Multi-Provider and Universal AI Support
+Open your Rails folder in any of these tools — **conventions and rules auto-load automatically**:
 
-This repo uses **`.ai/` as the universal source of truth**. Abstract model tiers (`standard`, `fast`, `powerful`) are defined in `.ai/settings/model-tiers.yml` and resolved per provider.
+| Tool / Platform | Type | How It Auto-Loads |
+|---|---|---|
+| **Cursor** | IDE | Reads `AGENTS.md` and path-scoped `.cursor/rules/*.mdc` |
+| **Claude Code** | CLI / Agent | Reads `CLAUDE.md` and `.claude/` |
+| **opencode** (DeepSeek, etc.) | CLI / Agent | Reads `AGENTS.md` and `.opencode/` via `opencode.json` |
+| **Antigravity** (Google Gemini) | IDE / Agent | Auto-detects `AGENTS.md` |
+| **Gemini CLI** | CLI / Agent | Reads `GEMINI.md` |
+| **Windsurf** (Cascade) | IDE | Reads `AGENTS.md` and `.windsurfrules` |
+| **Cline** (VS Code) | IDE Ext | Reads `AGENTS.md` and `.clinerules/` |
+| **Continue.dev** | IDE Ext | Reads `.continue/rules/` |
+| **Aider** | Terminal CLI | Reads `CONVENTIONS.md` via `.aider.conf.yml` |
+| **GitHub Copilot** | IDE Ext | Reads `AGENTS.md` and `.github/instructions/` |
+| **MiMo Code / Kimi Code / Muse Code** | CLI / Agent | Native `AGENTS.md` discovery |
+| **Web Chat AIs** (ChatGPT, Kimi, Ling, Claude web) | Web / API | Paste `AI_CONTEXT.md` (single all-in-one bundle) |
 
-**One command keeps all AI configurations in sync:**
+---
+
+## 🎯 Key Features
+
+### 1. 🤖 19 Specialized Subagents
+Domain-expert agents configured with precise tool permissions and clear delegation boundaries:
+- **Architecture & Logic:** `@model-agent`, `@service-agent`, `@query-agent`, `@policy-agent`, `@form-agent`
+- **Controller & API:** `@controller-agent`, `@migration-agent`
+- **Frontend & UI:** `@viewcomponent-agent`, `@tailwind-agent`, `@turbo-agent`, `@stimulus-agent`, `@presenter-agent`
+- **Jobs & Mailers:** `@job-agent`, `@mailer-agent`
+- **TDD & Quality:** `@rspec-agent`, `@implementation-agent` (GREEN phase), `@tdd-refactoring-agent`, `@lint-agent`
+- **Database:** `@database-reviewer` (PostgreSQL optimization)
+
+### 2. 📜 15 Rails Coding Rules & Conventions
+Path-scoped instructions that guide AI behavior during file edits:
+- Models, Controllers, Services, Queries, Policies, Jobs, Mailers, Migrations, Views, Testing, Anti-patterns, Principles, CLI workflows, and Token reduction (`caveman.md`).
+
+### 3. 🧠 18 Workflow Skills
+On-demand specialized playbooks including:
+- `code-review`, `security-audit` (Brakeman / OWASP), `accessibility-review` (WCAG 2.2 AA), `performance-optimization` (N+1 query detection), `solid-queue-setup`, `action-cable-patterns`, and more.
+
+### 4. 📋 Spec-Driven Development (SDD) Kit
+A complete specification-to-implementation pipeline with 26 slash commands:
+- `/feature-spec` & `/sdd:specify`: Structured interview and spec generation
+- `/sdd:plan` & `/sdd:tasks`: Technical planning and task breakdown
+- `/sdd:implement`: TDD task execution with progress tracking
+- `/sdd-change:*`: Lightweight fast-track mode for bug fixes and small tweaks
+
+### 5. 📦 Universal Context Bundle (`AI_CONTEXT.md`)
+A single self-contained markdown file aggregating project architecture, rules, and agent definitions — perfect for pasting into ChatGPT, Claude.ai Projects, Gemini Gems, or LLM API system prompts.
+
+---
+
+## 📖 Daily Usage Guide
+
+### Using with IDE & Terminal Agents
+Just open your project in your tool (Cursor, Windsurf, Claude Code, etc.). The agent will automatically follow your Rails architecture, TDD workflows, and testing commands (`bundle exec rspec`).
+
+### Using with Web Chat AIs
+1. Open `AI_CONTEXT.md`.
+2. Copy and paste its content into your chat or set it as a Custom GPT / Claude Project system prompt.
+
+### Updating Rules or Agents
+Always make edits in the canonical source folder **`.ai/`**:
 
 ```bash
+# 1. Edit rules, skills, or agents in .ai/
+# 2. Run the sync command:
 scripts/sync_all.sh
-# or:
-ruby scripts/sync_ai_to_all.rb
+
+# 3. Commit changes to git
+git add .ai/ AGENTS.md
+git commit -m "chore: update Rails AI conventions"
 ```
 
-Restart your AI tool or reload the chat session after syncing to pick up updates.
+The sync script automatically propagates your changes to all 10+ provider targets.
 
-## What's Inside
+---
 
-### Agents (`.claude/agents/`)
-
-19 specialist agents, each with `permissionMode: acceptEdits`, `memory: project`, `maxTurns` limits, and WHEN/WHEN NOT descriptions for auto-delegation.
-
-| Agent | Domain | Model |
-|---|---|---|
-| `model-agent` | ActiveRecord models, validations, associations, scopes | sonnet |
-| `controller-agent` | Thin RESTful controllers, strong params, Pundit | sonnet |
-| `service-agent` | Service objects, Result pattern, SOLID | sonnet |
-| `migration-agent` | Safe, reversible database migrations | haiku |
-| `policy-agent` | Pundit authorization policies | sonnet |
-| `form-agent` | Multi-model forms, wizard forms | sonnet |
-| `query-agent` | Complex queries, N+1 prevention | sonnet |
-| `presenter-agent` | View logic separation with SimpleDelegator | sonnet |
-| `viewcomponent-agent` | Reusable, tested UI components | sonnet |
-| `job-agent` | Background jobs with Solid Queue | sonnet |
-| `mailer-agent` | ActionMailer with previews and templates | sonnet |
-| `turbo-agent` | Turbo Frames, Streams, Drive | sonnet |
-| `stimulus-agent` | Stimulus controllers | sonnet |
-| `tailwind-agent` | Tailwind CSS styling | sonnet |
-| `rspec-agent` | RSpec tests | sonnet |
-| `implementation-agent` | TDD GREEN phase orchestrator (worktree isolation) | sonnet |
-| `tdd-refactoring-agent` | TDD REFACTOR phase | sonnet |
-| `lint-agent` | RuboCop linting and auto-correction | haiku |
-| `database-reviewer` | PostgreSQL query optimization, schema design, performance | sonnet |
-
-### Commands (`.claude/commands/`)
-
-26 slash commands across 4 namespaces. See also [SDD commands](#sdd-commands-claudecommandssdd) below.
-
-#### Standalone (7)
-
-| Command | Purpose |
-|---|---|
-| `/feature-spec` | Structured interview to write a complete spec with Gherkin scenarios |
-| `/feature-spec-review` | Scores specs, identifies gaps, generates missing scenarios |
-| `/feature-plan` | Converts spec into TDD implementation plan with PR breakdown |
-| `/feature-tdd-implementation` | Guides full Red-Green-Refactor TDD workflow |
-| `/frame-problem` | Reframes vague requests into clear problems |
-| `/prompt-improver` | Scores and rewrites vague prompts into specific, actionable ones |
-| `/catchup` | "Welcome back" report on a feature branch — commits, authors, themes, and risks since the dev's last contribution |
-
-#### Sentry Commands (`.claude/commands/sentry/`)
-
-| Command | Purpose |
-|---|---|
-| `/sentry:monitor` | Check for new production errors and propose fixes |
-| `/sentry:fix-error` | Launch a background agent in an isolated worktree to fix a Sentry error |
-| `/sentry:fix-status` | List all active Sentry fix branches and their status |
-| `/sentry:report` | Generate a markdown summary of Sentry error status for standups or PRs |
-| `/sentry:resolve` | Resolve, ignore, or reopen a Sentry issue after a fix is deployed |
-
-### Skills (`.claude/skills/`)
-
-18 skills with reference docs. Two patterns: **task skills** (user-invocable workflows) and **knowledge skills** (auto-loaded conventions).
-
-| Skill | Type | Purpose |
-|---|---|---|
-| `code-review` | Task | SOLID analysis, N+1 detection, anti-patterns (read-only) |
-| `security-audit` | Task | OWASP Top 10 audit with Brakeman (runs with opus) |
-| `accessibility-review` | Task | WCAG 2.2 AA audit with axe-core / Lighthouse / Pa11y, progressive-disclosure references for ARIA patterns and Rails snippets (runs with opus) |
-| `codex-review` | Task | Independent second opinion from OpenAI Codex CLI on plans, diffs, or specs |
-| `dependabot-review` | Task | Reviews Dependabot gem upgrade PRs for breaking changes and merge readiness |
-| `behavioral-guidelines` | Knowledge | Guidelines to reduce common LLM coding mistakes (auto-loaded) |
-| `rails-architecture` | Knowledge | Layered architecture decisions (runs with opus) |
-| `postgres-patterns` | Knowledge | PostgreSQL query optimization, schema design, indexing, and security |
-| `authentication-flow` | Knowledge | Rails 8 built-in authentication |
-| `caching-strategies` | Knowledge | Fragment, Russian doll, low-level caching |
-| `performance-optimization` | Knowledge | N+1 detection, query optimization |
-| `extraction-timing` | Knowledge | When and how to extract services, queries, concerns |
-| `action-cable-patterns` | Knowledge | WebSocket real-time features |
-| `active-storage-setup` | Knowledge | File uploads and variants |
-| `api-versioning` | Knowledge | RESTful API design |
-| `i18n-patterns` | Knowledge | Internationalization |
-| `solid-queue-setup` | Knowledge | Background job configuration |
-| `rails-concern` | Knowledge | Shared behavior with concerns |
-
-### Rules (`.claude/rules/`)
-
-14 rules: 11 path-scoped (auto-load when Claude works on matching files) and 3 always-on.
-
-#### Path-scoped (11)
-
-| Rule | Scoped to |
-|---|---|
-| `models.md` | `app/models/**`, `spec/models/**`, `spec/factories/**` |
-| `controllers.md` | `app/controllers/**`, `spec/requests/**` |
-| `services.md` | `app/services/**`, `spec/services/**` |
-| `queries.md` | `app/queries/**`, `spec/queries/**` |
-| `policies.md` | `app/policies/**`, `spec/policies/**` |
-| `jobs.md` | `app/jobs/**`, `spec/jobs/**` |
-| `mailers.md` | `app/mailers/**`, `spec/mailers/**` |
-| `migrations.md` | `db/migrate/**`, `db/schema.rb` |
-| `views.md` | `app/views/**`, `app/components/**`, `app/presenters/**` |
-| `testing.md` | `spec/**` |
-| `anti-patterns.md` | `app/**/*.rb`, `spec/**/*.rb` |
-
-#### Always-on (3)
-
-| Rule | Purpose |
-|---|---|
-| `principles.md` | KISS, DRY, YAGNI, SRP, and Rails architecture principles |
-| `cli.md` | Rails CLI commands reference (dev server, tests, db, generators) |
-| `cli-tools.md` | Preferred CLI tools: `rg` over `grep`, `fd` over `find` |
-
-### Hooks (`.claude/settings.json`)
-
-| Hook | Event | What it does |
-|---|---|---|
-| **SessionStart** | Session begins | Injects project context (branch, Ruby/Rails version, pending migrations) |
-| **PostToolUse** | After Edit/Write | Auto-formats Ruby files with RuboCop |
-| **PreToolUse** | Before Bash | Blocks destructive commands (rm -rf, DROP TABLE, force push to main) |
-| **TaskCompleted** | Task marked done | Quality gate: reminds to run tests and linting |
-| **Stop** | Response ends | Desktop notification |
-
-### Settings
-
-- **Agent Teams** enabled (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS`)
-- **JSON Schema** for editor autocomplete
-- **Smart model routing**: opus for architecture/security, sonnet for coding, haiku for linting
-
-### Statusline (`statusline/`)
-
-A two-line statusline that surfaces the signals you actually need while working: git state, model, and usage budgets.
-
-![Statusline](statusline/screenshot.png)
-
-- **Line 1** — current branch (with a `✗` marker when the working tree is dirty), model name, and reasoning effort level
-- **Line 2** — context window usage, 5-hour rate-limit usage with reset countdown, 7-day rate-limit usage with reset countdown
-- **Color-coded thresholds** — green under 50%, yellow 50–79%, red at 80%+ so you can see budget pressure at a glance
-
-Wire it up in `~/.claude/settings.json`:
-
-```json
-{
-  "statusLine": {
-    "type": "command",
-    "command": "bash /absolute/path/to/statusline/statusline.sh"
-  }
-}
-```
-
-## Spec Driven Development (SDD) Kit
-
-A structured specification-to-implementation pipeline powered by 11 slash commands. SDD enforces a disciplined workflow: define what you're building before writing code, validate requirements quality, then implement from a task plan.
-
-### SDD Commands (`.claude/commands/sdd/`)
-
-| Command | Purpose |
-|---|---|
-| `/sdd:constitution` | Create or update the project constitution — core principles and governance rules |
-| `/sdd:specify` | Generate a feature specification from a natural language description |
-| `/sdd:clarify` | Ask up to 5 targeted questions to reduce ambiguity in the spec |
-| `/sdd:spec-review` | Adversarial review of the spec from security, performance, edge-case, scalability, and compliance perspectives |
-| `/sdd:checklist` | Generate a requirements quality checklist |
-| `/sdd:plan` | Create a technical implementation plan with research, data model, and contracts |
-| `/sdd:tasks` | Break the plan into dependency-ordered, executable tasks organized by user story |
-| `/sdd:analyze` | Read-only consistency analysis across spec, plan, and tasks |
-| `/sdd:implement` | Execute the task plan phase-by-phase with progress tracking |
-| `/sdd:implement-subagents` | Same as implement, but spawns a fresh-context subagent per task to prevent context rot on large features |
-| `/sdd:validate` | Post-implementation drift detection — verifies code implements what the spec promises (4-layer hybrid, no annotations needed) |
-
-### SDD Workflow
+## 📁 Repository Structure
 
 ```
-/sdd:constitution                  # 1. Define project principles (once)
-/sdd:specify user authentication   # 2. Write the feature spec
-/sdd:clarify                       # 3. Resolve ambiguities (optional)
-/sdd:spec-review                   # 4. Adversarial review from 5 perspectives (optional)
-/sdd:checklist security            # 5. Validate requirements quality (optional)
-/sdd:plan                          # 6. Generate technical plan + data model
-/sdd:tasks                         # 7. Break into ordered tasks
-/sdd:analyze                       # 8. Cross-artifact consistency check
-/sdd:implement                     # 9. Execute tasks with verification
-# Or for large features:
-/sdd:implement-subagents           # 9. Fresh-context subagent per task (prevents context rot)
-/sdd:validate                      # 10. Verify implementation matches spec (post-implementation)
+├── .ai/                    # ⭐ CANONICAL SOURCE OF TRUTH (edit here)
+│   ├── agents/             # 19 specialist subagents (abstract model tiers)
+│   ├── commands/           # 26 slash commands & SDD pipelines
+│   ├── rules/              # 15 coding rules and architectural constraints
+│   ├── skills/             # 18 task and knowledge playbooks
+│   └── settings/           # Model tiers, base hooks, provider definitions
+├── AGENTS.md               # Open standard entry point (read by Cursor, MiMo, etc.)
+├── CLAUDE.md               # Claude Code entry point (@AGENTS.md)
+├── GEMINI.md               # Gemini CLI entry point (@AGENTS.md)
+├── AI_CONTEXT.md           # Generated single-file bundle for web chat AIs
+├── install.sh              # One-line zero-copy installer
+└── scripts/
+    ├── sync_ai_to_all.rb   # Master multi-provider sync engine
+    └── sync_all.sh         # Sync convenience command
 ```
 
-Each command hands off to the next via suggested prompts. The pipeline creates a `specs/<branch-name>/` directory with all artifacts:
+---
 
-```
-specs/001-user-auth/
-├── spec.md           # Feature specification (/sdd:specify)
-├── plan.md           # Implementation plan (/sdd:plan)
-├── research.md       # Technical research & decisions (/sdd:plan)
-├── data-model.md     # Entity definitions (/sdd:plan)
-├── quickstart.md     # Integration scenarios (/sdd:plan)
-├── contracts/        # Route and API contracts (/sdd:plan)
-├── tasks.md          # Executable task list (/sdd:tasks)
-├── checklists/       # Requirements quality checklists (/sdd:checklist)
-└── validation-report.md  # Post-implementation drift report (/sdd:validate)
-```
+## 📄 License
 
-### SDD Infrastructure (`.specify/`)
-
-The `.specify/` directory contains the scaffolding that powers SDD commands. It is optional for normal prompting; you only need it for the `/sdd:*` and `/sdd-change:*` workflows:
-
-- **`templates/`** — Markdown templates for specs, plans, tasks, checklists, constitutions, and agent context files
-- **`scripts/bash/`** — Shell scripts for branch creation, prerequisite checking, plan setup, and agent context updates
-- **`memory/`** — Persistent project state (constitution, lessons learned across features)
-- **`init-options.json`** — Configuration (branch numbering mode, AI agent type)
-
-SDD supports extensibility via `.specify/extensions.yml` for before/after hooks on any command, template overrides in `.specify/templates/overrides/`, and presets in `.specify/presets/`.
-
-### Key SDD Concepts
-
-- **Constitution** — Non-negotiable project principles validated at every planning gate
-- **Lessons Learned** — Cross-feature learnings accumulate in `.specify/memory/lessons-learned.md` and feed into future planning and implementation
-- **Adversarial Spec Review** — `/sdd:spec-review` challenges the spec from security, performance, edge-case, scalability, and compliance perspectives before planning begins
-- **Specs are stakeholder-facing** — No implementation details; focus on WHAT and WHY
-- **Checklists are "unit tests for English"** — They validate requirements quality, not implementation correctness
-- **Tasks organized by user story** — Each story is independently implementable and testable (MVP-first)
-- **Fresh-context implementation** — `/sdd:implement-subagents` spawns a clean subagent per task, preventing context rot on large features
-- **Post-implementation validation** — `/sdd:validate` uses a 4-layer hybrid approach (structural scan, test mapping, AI semantic analysis, acceptance test generation) to verify the code matches the spec — works on day one, no code annotations needed
-
-### SDD Small-Change (Lightweight Mode)
-
-For bug fixes and small features that don't need the full SDD ceremony. Three commands, no plan, no checklists, no analysis — just specify, task, implement.
-
-#### Commands (`.claude/commands/sdd-change/`)
-
-| Command | Purpose |
-|---|---|
-| `/sdd-change:specify` | Create a minimal change spec (problem, fix, acceptance criteria, files affected) |
-| `/sdd-change:tasks` | Generate a flat 3-8 task list from the change spec |
-| `/sdd-change:implement` | Execute tasks sequentially with validation |
-
-#### Workflow
-
-```
-/sdd-change:specify Fix login timeout — sessions expire after 5min instead of 30
-/sdd-change:tasks
-/sdd-change:implement
-```
-
-#### When to Use Which
-
-| Situation | Use |
-|---|---|
-| Bug fix, patch, tweak | `/sdd-change:specify` |
-| New feature, multi-story epic | `/sdd:specify` |
-| Refactor touching 1-3 files | `/sdd-change:specify` |
-| Refactor touching 6+ files | `/sdd:specify` |
-
-The lightweight pipeline warns you if your change looks too complex (>3 acceptance criteria or >6 files affected) and suggests switching to the full pipeline.
-
-## Scripts (`scripts/`)
-
-| Script | Purpose |
-|---|---|
-| `start_rails_tmux.sh` | Open (or reuse) a tmux session with a three-pane main-vertical layout: editor on the left, `bin/dev` (or `bin/rails server`) top-right, `bin/rails console` bottom-right. Idempotent — re-running attaches to the existing session and auto-restarts any pane that has dropped back to a shell prompt. |
-| `sync_claude_to_opencode.sh` | Mirror `.claude/` into opencode: agents + commands + rules → `.opencode/`, skills → `.agents/skills/` |
-| `sync_claude_skills_to_codex.sh` | Mirror `.claude/skills/` into `.agents/skills/` for OpenAI Codex compatibility |
-| `sync_claude_rules_to_copilot.sh` | Generate `.github/instructions/claude-rules/` bridge files from `.claude/rules/` for GitHub Copilot |
-
-## MCP Servers (`mcp/`)
-
-Custom MCP servers that extend the AI assistant with external integrations. Registered for Claude Code via `.mcp.json` and for opencode via the `mcp` key in `opencode.json`.
-
-| Server | Purpose | Docs |
-|--------|---------|------|
-| [`sentry_monitor`](mcp/sentry_monitor/) | Exposes Sentry production errors as AI tools — query issues, map stack traces to local files, detect new errors with persistent state tracking, PII redaction by default | [README](mcp/sentry_monitor/README.md) |
-
-## Documentation
-
-| Document | Purpose |
-|---|---|
-| [Your First SDD Feature](docs/your-first-sdd-feature.md) | Step-by-step onboarding walkthrough for new developers using the SDD kit |
-| [SDD Team Scalability Analysis](docs/sdd-team-scalability-analysis.md) | Risks, gaps, and roadmap for scaling SDD to a 30-developer team |
-| [Rails Development Principles](docs/rails-development-principles.md) | Universal software principles, Rails doctrine, modern Rails 8 architecture, testing, security, and performance |
-| [Prompt Engineering for Claude Code](docs/prompt-engineering-for-claude-code.md) | Writing effective prompts for Claude Code in web development, with Rails-specific patterns |
-| [Claude Code Extensibility Guide](docs/claude-code-extensibility-guide.md) | All extension mechanisms: CLAUDE.md, skills, hooks, subagents, Agent Teams, MCP servers, and plugins |
-| [Claude Code Frontmatter Reference](docs/claude-code-frontmatter-reference.md) | YAML frontmatter syntax for configuring agents, skills, and commands in `.claude/` files |
-| [MCP Servers for Rails](docs/mcp-servers-rails-guide.md) | Extending Claude Code with Model Context Protocol servers for Rails, databases, and APIs |
-| [PRD Best Practices](docs/prd-best-practices.md) | Writing effective Product Requirements Documents in agile, AI-in-the-loop environments |
-| [Technical Design Documents](docs/technical-design-document.md) | TDDs, ADRs, and Engineering RFCs for agentic SDLC teams |
-| [Design Specifications](docs/design-specification.md) | UI/UX design specs and API specifications (OpenAPI) for frontend/backend contracts |
-| [Specification Document Hierarchy](docs/specification-document-hierarchy.md) | Reference map showing which documents answer which core questions |
-| [AI Terminology Glossary](docs/ai-glossary.md) | 289 AI/ML terms across 25 categories — also available as a [browsable HTML version](https://thibautbaissac.github.io/ai/glossary.html) |
-
-## License
-
-MIT
+MIT License. Free for personal and commercial Rails development.
