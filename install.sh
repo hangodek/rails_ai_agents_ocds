@@ -23,15 +23,18 @@ if ! command -v ruby >/dev/null 2>&1; then
   exit 1
 fi
 
+# Check if Git is installed
+if ! command -v git >/dev/null 2>&1; then
+  echo "Error: Git is required to download agent definitions. Please install Git first." >&2
+  exit 1
+fi
+
 TMP_DIR=$(mktemp -d)
 trap 'rm -rf "${TMP_DIR}"' EXIT
 
 echo "1. Downloading canonical AI agent definitions..."
-git clone --depth=1 --filter=blob:none --sparse "https://github.com/${REPO}.git" "${TMP_DIR}" 2>/dev/null
-(
-  cd "${TMP_DIR}"
-  git sparse-checkout set .ai scripts AGENTS.md GEMINI.md
-)
+git clone --depth=1 --branch="${BRANCH}" "https://github.com/${REPO}.git" "${TMP_DIR}" 2>/dev/null || \
+git clone --depth=1 "https://github.com/${REPO}.git" "${TMP_DIR}"
 
 echo "2. Installing into current directory..."
 cp -r "${TMP_DIR}/.ai" .
