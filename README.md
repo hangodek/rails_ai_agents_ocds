@@ -59,9 +59,9 @@ Domain-expert agents configured with precise tool permissions and clear delegati
 Path-scoped instructions that guide AI behavior during file edits:
 - Models, Controllers, Services, Queries, Policies, Jobs, Mailers, Migrations, Views, Testing, Anti-patterns, Principles, CLI workflows, and Token reduction (`caveman.md`).
 
-### 3. 🧠 18 Workflow Skills
+### 3. 🧠 20 Workflow Skills
 On-demand specialized playbooks including:
-- `code-review`, `security-audit` (Brakeman / OWASP), `accessibility-review` (WCAG 2.2 AA), `performance-optimization` (N+1 query detection), `solid-queue-setup`, `action-cable-patterns`, and more.
+- `code-review`, `security-audit` (Brakeman / OWASP), `accessibility-review` (WCAG 2.2 AA), `performance-optimization` (N+1 query detection), `solid-queue-setup`, `action-cable-patterns`, `codex-review`, `friction-review`, and more.
 
 ### 4. 📋 Spec-Driven Development (SDD) Kit
 A complete specification-to-implementation pipeline with 26 slash commands:
@@ -108,7 +108,7 @@ The sync script automatically propagates your changes to all 10+ provider target
 │   ├── agents/             # 19 specialist subagents (abstract model tiers)
 │   ├── commands/           # 26 slash commands & SDD pipelines
 │   ├── rules/              # 15 coding rules and architectural constraints
-│   ├── skills/             # 18 task and knowledge playbooks
+│   ├── skills/             # 20 task and knowledge playbooks
 │   └── settings/           # Model tiers, base hooks, provider definitions
 ├── AGENTS.md               # Open standard entry point (read by Cursor, MiMo, etc.)
 ├── CLAUDE.md               # Claude Code entry point (@AGENTS.md)

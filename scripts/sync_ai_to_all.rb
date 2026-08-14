@@ -327,26 +327,38 @@ def sync_opencode
   FileUtils.rm_f(File.join(skills_target_dir, ".claude-sync-manifest"))
   File.write(File.join(skills_target_dir, ".ai-sync-manifest"), manifest_entries.select { |e| e.start_with?("skill:") }.join("\n") + "\n")
 
-  # Regenerate opencode.json
+  # Regenerate opencode.json (preserving user's custom model & mcp settings if present)
+  existing_json = if File.exist?(File.join(REPO_ROOT, "opencode.json"))
+                    begin
+                      JSON.parse(File.read(File.join(REPO_ROOT, "opencode.json")))
+                    rescue StandardError
+                      {}
+                    end
+                  else
+                    {}
+                  end
+
+  default_mcp = {
+    "sentry-monitor" => {
+      "type" => "local",
+      "command" => [
+        "mcp/sentry_monitor/.venv/bin/python",
+        "-m",
+        "mcp_server.server"
+      ],
+      "environment" => {
+        "PYTHONPATH" => "mcp/sentry_monitor"
+      },
+      "enabled" => true
+    }
+  }
+
   opencode_json = {
     "$schema" => "https://opencode.ai/config.json",
-    "model" => "opencode/deepseek-v4-flash-free",
-    "small_model" => "opencode/deepseek-v4-flash-free",
+    "model" => existing_json["model"] || "opencode/deepseek-v4-flash-free",
+    "small_model" => existing_json["small_model"] || "opencode/deepseek-v4-flash-free",
     "instructions" => ["AGENTS.md"] + rules_for_json,
-    "mcp" => {
-      "sentry-monitor" => {
-        "type" => "local",
-        "command" => [
-          "mcp/sentry_monitor/.venv/bin/python",
-          "-m",
-          "mcp_server.server"
-        ],
-        "environment" => {
-          "PYTHONPATH" => "mcp/sentry_monitor"
-        },
-        "enabled" => true
-      }
-    }
+    "mcp" => existing_json["mcp"] || default_mcp
   }
   File.write(File.join(REPO_ROOT, "opencode.json"), JSON.pretty_generate(opencode_json) + "\n")
   puts "  Synced #{manifest_entries.size} items and updated opencode.json with #{rules_for_json.size} rules"

@@ -301,26 +301,6 @@ Dir.glob(File.join(CLAUDE_DIR, "rules", "*.md")).sort.each do |file|
   puts "Migrated rule: #{name}"
 end
 
-# Ensure design.md is in .ai/rules/
-design_rule = <<~MD
----
-paths:
-  - "app/views/**"
-  - "app/components/**"
-  - "app/assets/**"
-  - "DESIGN.md"
----
-
-# Design Compliance
-
-- Every styling and theme (Tailwind classes, colors, fonts, spacing, components, layouts) MUST follow `DESIGN.md` at the repo root
-- No custom colors, fonts, spacing, or component styles outside what `DESIGN.md` defines
-- If `DESIGN.md` does not exist in the repo root, ask the user for the design reference before adding styling
-- When `DESIGN.md` changes, update existing views and components to match
-MD
-File.write(File.join(AI_DIR, "rules", "design.md"), design_rule)
-puts "Added rule: design.md"
-
 # 5. Migrate Skills
 Dir.glob(File.join(CLAUDE_DIR, "skills", "*")).sort.each do |dir|
   next unless File.directory?(dir)
